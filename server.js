@@ -8,6 +8,21 @@ const app = express();
 
 app.use(cors());
 
+app.get("/api/teamsWithoutPlayer", (req, res, next) => {
+  var sql = `SELECT * FROM Team`;
+  var params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ "error": err.message });
+      return;
+    }
+    res.json({
+      "message": "success",
+      "data": rows
+    })
+  });
+});
+
 app.get("/api/teams", (req, res, next) => {
   var sql = `SELECT Player.Id, Player.Name AS PlayerName, TeamId, Team.Name AS TeamName
                 FROM Player
