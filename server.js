@@ -153,6 +153,25 @@ app.get("/api/standings", (req, res, next) => {
   });
 });
 
+app.get("/api/standingsCSV", (req, res, next) => {
+  var sql = `SELECT Id, TeamId, Team.Name AS TeamName, Played, Won, 
+              Drawn, Lost, Points, GF, GA, GD
+              FROM "TeamStanding"
+              JOIN Team ON Team.Id = TeamStanding.TeamId
+              ORDER BY Points DESC, Team.Name`;
+  var params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ "error": err.message });
+      return;
+    }
+    res.json({
+      "message": "success",
+      "data": rows
+    })
+  });
+});
+
 app.get("/api/scorers", (req, res, next) => {
   var sql = `SELECT PlayerId, Player.Name, SUM(Goals) AS TotalGoals FROM Scorer
                 JOIN Player ON Player.Id = Scorer.PlayerId
@@ -168,6 +187,30 @@ app.get("/api/scorers", (req, res, next) => {
       "message": "success",
       "data": rows
     })
+  });
+});
+
+app.get("/api/scorersCSV", (req, res, next) => {
+  var sql = `SELECT PlayerId, Player.Name, SUM(Goals) AS TotalGoals FROM Scorer
+                JOIN Player ON Player.Id = Scorer.PlayerId
+                GROUP BY PlayerId
+                ORDER BY TotalGoals DESC`;
+  var params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ "error": err.message });
+      return;
+    }
+    let csvData = '';
+    rows.forEach((row) => {
+      csvData += [row.Name, row.TotalGoals].join(",") + "\r\n"
+    })
+    res
+    .set({
+      "Content-Type": "text/csv",
+      "Content-Disposition": `attachment; filename="scorers.csv"`,
+    })
+    .send(csvData);
   });
 });
 
