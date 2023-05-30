@@ -92,6 +92,48 @@ app.get("/api/fixtures", (req, res, next) => {
   });
 });
 
+app.get("/api/fixturesCSV", (req, res, next) => {
+  var sql = `SELECT Fixture.Id, TimeLocation, HomeTeamId, HomeTeam.Name AS HomeTeamName, 
+              AwayTeamId, AwayTeam.Name AS AwayTeamName, Result1, Result2
+              FROM "Fixture" 
+              JOIN Team AS HomeTeam 
+              ON HomeTeam.Id = Fixture.HomeTeamId
+              JOIN Team AS AwayTeam 
+              ON AwayTeam.Id = Fixture.AwayTeamId
+              ORDER BY Fixture.Id`;
+  var params = []
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ "error": err.message });
+      return;
+    }
+    var checkFinal = rows.indexOf(s => s.TimeLocation == "[Final] 7B, 18:30 Thu Jun 22 2023");
+    if (checkFinal == -1) {
+      rows.push({
+        "Id": 99,
+        "TimeLocation": "[Final] 7B, 18:30 Thu Jun 22 2023",
+        "HomeTeamId": null,
+        "HomeTeamName": "1st Group",
+        "AwayTeamId": null,
+        "AwayTeamName": "2nd Group",
+        "Result1": null,
+        "Result2": null
+      });
+    }
+    let csvData = ["Time Location", "Home Team", "Away Team", "Result"].join(",") + "\r\n"
+    rows.forEach((row) => {
+      let result = (row.Result1 ?? '') + ' - ' + (row.Result2  ?? '');
+      csvData += ["\"" + row.TimeLocation + "\"", row.HomeTeamName, row.AwayTeamName, result].join(",") + "\r\n"
+    })
+    res
+    .set({
+      "Content-Type": "text/csv",
+      "Content-Disposition": `attachment; filename="fixtures.csv"`,
+    })
+    .send(csvData);
+  });
+});
+
 app.get("/api/standings", (req, res, next) => {
   var sql = `SELECT Id, TeamId, Team.Name AS TeamName, Played, Won, 
               Drawn, Lost, Points, GF, GA, GD
