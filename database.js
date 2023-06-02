@@ -148,21 +148,21 @@ class dbUil {
                 if (fixture.Result1 > fixture.Result2) {
                   standing.Won = fixture.HomeTeamId == team.Id ? 1 : 0;
                   standing.Lost = fixture.HomeTeamId == team.Id ? 0 : 1;
-                  
+
                 }
                 if (fixture.Result1 == fixture.Result2) {
                   standing.Drawn = 1;
-                  
+
                 }
                 if (fixture.Result1 < fixture.Result2) {
                   standing.Won = fixture.HomeTeamId == team.Id ? 0 : 1;
                   standing.Lost = fixture.HomeTeamId == team.Id ? 1 : 0;
-                  
+
                 }
-                
+
                 standing.Points = 3 * standing.Won + 1 * standing.Drawn;
                 standing.GD = standing.GF - standing.GA;
-  
+
                 var checkIndex = items.findIndex(
                   s => s.TeamId == standing.TeamId
                 );
@@ -181,20 +181,22 @@ class dbUil {
               }
             }
           }
-          if(items.length == 0){
+          if (items.length == teams.length) {
             for (let team of teams) {
+              let checkExist = item.findIndex(s => s.TeamId == team.Id);
+              if (checkExist > -1) continue;
               let standing = {};
-                standing.TeamId = team.Id;
-                standing.TeamName = team.Name;
-                standing.Played = 0;
-                standing.Won = 0;
-                standing.Drawn = 0;
-                standing.Lost = 0;
-                standing.GF = 0;
-                standing.GA = 0;
-                standing.GD = 0;
-                standing.Points = 0;
-                items.push(standing);
+              standing.TeamId = team.Id;
+              standing.TeamName = team.Name;
+              standing.Played = 0;
+              standing.Won = 0;
+              standing.Drawn = 0;
+              standing.Lost = 0;
+              standing.GF = 0;
+              standing.GA = 0;
+              standing.GD = 0;
+              standing.Points = 0;
+              items.push(standing);
             }
           }
           //console.log(items);
