@@ -21,6 +21,24 @@ app.get("/api/sponsors", (req, res, next) => {
   });
 });
 
+app.get("/api/sponsorsCSV", (req, res, next) => {
+  new dbUil().getSponsors().then((rows) => {
+    let csvData = '';
+    rows.forEach((row) => {
+      csvData += [row.Name, row.Amount, row.Date].join(",") + "\r\n"
+    })
+    res
+      .set({
+        "Content-Type": "text/csv",
+        "Content-Disposition": `attachment; filename="sponsors.csv"`,
+      })
+      .send(csvData);
+  }, (err) => {
+    res.status(400).json({ "error": err.message });
+    return;
+  });
+});
+
 app.get("/api/teamsWithoutPlayer", (req, res, next) => {
   new dbUil().getTeamsWithoutPlayer().then((rows) => {
     res.json({
@@ -122,7 +140,7 @@ app.get("/api/scorers", (req, res, next) => {
 });
 
 app.get("/api/scorersCSV", (req, res, next) => {
-  new dbUil().getFixtures().then((rows) => {
+  new dbUil().getScorers().then((rows) => {
     let csvData = '';
     rows.forEach((row) => {
       csvData += [row.Name, row.TotalGoals].join(",") + "\r\n"
