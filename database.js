@@ -183,7 +183,7 @@ class dbUil {
           }
           if (items.length == teams.length) {
             for (let team of teams) {
-              let checkExist = item.findIndex(s => s.TeamId == team.Id);
+              let checkExist = items.findIndex(s => s.TeamId == team.Id);
               if (checkExist > -1) continue;
               let standing = {};
               standing.TeamId = team.Id;
