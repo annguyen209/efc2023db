@@ -76,11 +76,19 @@ class dbUil {
   }
 
   getTeams() {
-    var sql = `SELECT Player.Id, Player.Name AS PlayerName, TeamId, Team.Name AS TeamName
-              FROM Player
-              JOIN Team
-              ON Player.TeamId = Team.Id
-              ORDER BY TeamId, Player.Name`;
+    var sql = `SELECT Player.Id, Player.Name AS PlayerName, TeamId, Team.Name 
+    AS TeamName, COALESCE(TotalGoals, 0) as TotalGoals
+                  FROM Player
+                  JOIN Team
+                  ON Player.TeamId = Team.Id
+                  LEFT JOIN (
+                    SELECT PlayerId, Player.Name, SUM(Goals) AS TotalGoals FROM Scorer
+                  JOIN Player ON Player.Id = Scorer.PlayerId
+                  GROUP BY PlayerId
+                  ORDER BY TotalGoals DESC
+                  ) AS TopScorers
+                  ON Player.Id = TopScorers.PlayerId
+                  ORDER BY TeamId, Player.Name`;
     var params = []
     return new Promise(function (resolve, reject) {
       db.all(sql, params, (err, rows) => {
