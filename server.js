@@ -139,6 +139,18 @@ app.get("/api/scorers", (req, res, next) => {
   });
 });
 
+app.get("/api/allscorers", (req, res, next) => {
+  new dbUil().getAllScorers().then((rows) => {
+    res.json({
+      "message": "success",
+      "data": rows
+    })
+  }, (err) => {
+    res.status(400).json({ "error": err.message });
+    return;
+  });
+});
+
 app.get("/api/scorersCSV", (req, res, next) => {
   new dbUil().getScorers().then((rows) => {
     let csvData = '';

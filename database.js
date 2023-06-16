@@ -104,7 +104,21 @@ class dbUil {
     var sql = `SELECT PlayerId, Player.Name, SUM(Goals) AS TotalGoals FROM Scorer
               JOIN Player ON Player.Id = Scorer.PlayerId
               GROUP BY PlayerId
-              ORDER BY TotalGoals DESC`;
+              ORDER BY TotalGoals DESC, Player.Name`;
+    var params = []
+    return new Promise(function (resolve, reject) {
+      db.all(sql, params, (err, rows) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(rows);
+      });
+    });
+  }
+
+  getAllScorers() {
+    var sql = `SELECT PlayerId, Player.Name, Player.TeamId, Goals, MatchId FROM Scorer
+              JOIN Player ON Player.Id = Scorer.PlayerId`;
     var params = []
     return new Promise(function (resolve, reject) {
       db.all(sql, params, (err, rows) => {
