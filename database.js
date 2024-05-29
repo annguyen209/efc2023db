@@ -34,7 +34,7 @@ class dbUil {
         if (checkFinal == -1) {
           rows.push({
             "Id": 99,
-            "TimeLocation": "[Final] 7A, 18:30 Mon Jun 24 2024",
+            "TimeLocation": "[Final] 7B, 18:30 Thu Jun 27 2024",
             "HomeTeamId": null,
             "HomeTeamName": "1st Group",
             "AwayTeamId": null,
