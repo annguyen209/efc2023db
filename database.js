@@ -30,11 +30,11 @@ class dbUil {
         if (err) {
           reject(err);
         }
-        var checkFinal = rows.findIndex(s => s.TimeLocation == "[Final] 7B, 18:30 Thu Jun 22 2023");
+        var checkFinal = rows.findIndex(s => s.TimeLocation.includes("[Final]"));
         if (checkFinal == -1) {
           rows.push({
             "Id": 99,
-            "TimeLocation": "[Final] 7B, 18:30 Thu Jun 22 2023",
+            "TimeLocation": "[Final] 7A, 18:30 Mon Jun 24 2024",
             "HomeTeamId": null,
             "HomeTeamName": "1st Group",
             "AwayTeamId": null,
@@ -42,6 +42,9 @@ class dbUil {
             "Result1": null,
             "Result2": null
           });
+        }else{
+          rows[checkFinal].HomeTeamName = "1st Group";
+          rows[checkFinal].AwayTeamName = "2nd Group";
         }
         resolve(rows);
       });
