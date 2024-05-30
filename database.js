@@ -79,7 +79,7 @@ class dbUil {
   }
 
   getTeams() {
-    var sql = `SELECT Player.Id, Player.Name AS PlayerName, TeamId, Team.Name 
+    var sql = `SELECT Player.Id, Player.Name AS PlayerName, Player.PlayPositions, TeamId, Team.Name 
     AS TeamName, COALESCE(TotalGoals, 0) as TotalGoals
                   FROM Player
                   JOIN Team
