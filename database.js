@@ -2,7 +2,7 @@ const { rejects } = require('assert');
 const { resolve } = require('dns');
 
 const sqlite3 = require('sqlite3').verbose()
-const DBSOURCE = "efc2023.db"
+const DBSOURCE = ".data/efc2023.db"
 
 let db = new sqlite3.Database(DBSOURCE, (err) => {
   if (err) {
