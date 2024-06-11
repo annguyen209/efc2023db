@@ -145,10 +145,10 @@ class dbUil {
           for (let team of teams) {
             for (let fixture of fixtures) {
               if (
-                !fixture.HomeTeamId ||
-                !fixture.AwayTeamId ||
-                !fixture.Result1 ||
-                !fixture.Result2
+                fixture.HomeTeamId  == null||
+                fixture.AwayTeamId  == null||
+                fixture.Result1 == null ||
+                fixture.Result2 == null
               )
                 continue;
               if (
