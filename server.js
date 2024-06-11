@@ -81,7 +81,7 @@ app.get("/api/fixturesCSV", (req, res, next) => {
   new dbUil().getFixtures().then((rows) => {
     let csvData = ["Time Location", "Home Team", "Away Team", "Result"].join(",") + "\r\n"
     rows.forEach((row) => {
-      let result = (row.Result1 ? row.Result1 : '') + ' - ' + (row.Result2 ? row.Result2 : '');
+      let result = (row.Result1 != null ? row.Result1 : '') + ' - ' + (row.Result2 != null ? row.Result2 : '');
       csvData += ["\"" + row.TimeLocation + "\"", row.HomeTeamName, row.AwayTeamName, result].join(",") + "\r\n"
     })
     res
