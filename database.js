@@ -232,6 +232,8 @@ class dbUil {
               a.TeamName.localeCompare(b.TeamName)
             );
           });
+          //manual sort if same points and apply tiebreaker rules
+          
           resolve(items);
         }, (err) => {
           rejects(err);
